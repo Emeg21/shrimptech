@@ -1,0 +1,96 @@
+<div class="dashboard-container">
+  <!-- INFORMACIÓN DEL USUARIO -->
+  <div class="user-welcome">
+    <h1>Bienvenido, {{ authorize.currentUser$ | async }}</h1>
+    <p class="user-role"><strong>Rol:</strong> {{ authorize.currentUserRole$ | async }}</p>
+  </div>
+
+  <!-- BOTÓN PRINCIPAL SEGÚN ROL -->
+  <div class="main-module">
+    @if (authorize.currentUserRole$ | async; as role) { 
+      @switch (role) { 
+        @case ('Administrador') {
+          <div class="module-card" routerLink="/admin">
+            <div class="module-icon">⚙️</div>
+            <h2>Panel de Administración</h2>
+            <p>Gestión completa del sistema</p>
+          </div>
+        }  
+
+        @case ('Operario de Producción') {
+          <div class="module-card" routerLink="/production">
+            <div class="module-icon">🌊</div>
+            <h2>Módulo de Producción</h2>
+            <p>Gestión de lotes y cosechas</p>
+          </div>
+        } 
+
+        @case ('Técnico de Monitoreo') {
+          <div class="module-card" routerLink="/monitoring">
+            <div class="module-icon">🔬</div>
+            <h2>Monitoreo Ambiental</h2>
+            <p>Control de calidad de agua</p>
+          </div>
+        } 
+
+        @case ('Vendedor') {
+          <div class="module-card" routerLink="/sales">
+            <div class="module-icon">💰</div>
+            <h2>Módulo Comercial</h2>
+            <p>Ventas y gestión de clientes</p>
+          </div>
+        } 
+
+        @case ('Bodeguero') { 
+          <div class="inventory-modules"> 
+            <div class="inventory-card" routerLink="/inventory/products"> 
+              <div class="module-icon">📦</div> 
+              <h3>Gestión de Productos</h3> 
+              <p>Administra insumos y stock</p> 
+            </div> 
+            <div class="inventory-card" routerLink="/inventory/movements"> 
+              <div class="module-icon">🔄</div> 
+              <h3>Movimientos</h3> 
+              <p>Registra entradas y salidas</p> 
+            </div> 
+            <div class="inventory-card" routerLink="/inventory/alerts"> 
+              <div class="module-icon">⚠️</div> 
+              <h3>Alertas de Stock</h3> 
+              <p>Detecta insumos en mínimo</p> 
+            </div> 
+            <div class="inventory-card" routerLink="/inventory/reports"> 
+              <div class="module-icon">📊</div> 
+              <h3>Reportes</h3> 
+              <p>Visualiza consumos por periodo</p> 
+            </div> 
+          </div>
+        } 
+      } 
+      
+      <!-- ACCESOS RÁPIDOS (SOLO EL ADMINISTRADOR VE TODOS) -->
+      @if ((authorize.currentUserRole$ | async) === 'Administrador') {
+        <div class="quick-access">
+          <h3>Accesos Rápidos a Módulos</h3>
+          <div class="quick-grid">
+            <div class="quick-card" routerLink="/production">
+              <span class="quick-icon">🌊</span>
+              <span>Producción</span>
+            </div>
+            <div class="quick-card" routerLink="/monitoring">
+              <span class="quick-icon">🔬</span>
+              <span>Monitoreo</span>
+            </div>
+            <div class="quick-card" routerLink="/sales">
+              <span class="quick-icon">💰</span>
+              <span>Ventas</span>
+            </div>
+            <div class="quick-card" routerLink="/inventory">
+              <span class="quick-icon">📦</span>
+              <span>Inventario</span>
+            </div>
+          </div>
+        </div>
+      } 
+    } 
+</div> 
+
